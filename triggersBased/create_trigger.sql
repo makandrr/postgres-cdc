@@ -1,0 +1,5 @@
+CREATE TRIGGER users_cdc_trigger
+AFTER INSERT OR UPDATE OR DELETE
+ON users
+FOR EACH ROW
+EXECUTE FUNCTION capture_changes();

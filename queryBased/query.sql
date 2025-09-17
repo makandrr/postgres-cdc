@@ -1,0 +1,1 @@
+SELECT * FROM users WHERE last_updated > '2025-01-01'
