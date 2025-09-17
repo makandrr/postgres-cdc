@@ -1,0 +1,51 @@
+services:
+  publisher:
+    image: postgres:latest
+    container_name: pg_publisher
+    environment:
+      POSTGRES_DB: publisher_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - publisher_data:/var/lib/postgresql/data
+      - ./init-publisher.sql:/docker-entrypoint-initdb.d/init.sql
+    command: >
+      postgres
+      -c wal_level=logical
+      -c max_wal_senders=3
+      -c max_replication_slots=3
+      -c max_logical_replication_workers=4
+      -c max_worker_processes=8
+    networks:
+      - postgres_network
+  subscriber:
+    image: postgres:latest
+    container_name: pg_subscriber
+    environment:
+      POSTGRES_DB: subscriber_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - subscriber_data:/var/lib/postgresql/data
+      - ./init-subscriber.sql:/docker-entrypoint-initdb.d/init.sql
+    command: >
+      postgres
+      -c wal_level=logical
+      -c max_logical_replication_workers=4
+      -c max_worker_processes=8
+    networks:
+      - postgres_network
+    depends_on:
+      - publisher
+
+volumes:
+  publisher_data:
+  subscriber_data:
+
+networks:
+  postgres_network:
+    driver: bridge
