@@ -1,3 +1,5 @@
+-- publisher db
+
 CREATE PUBLICATION my_publication FOR ALL TABLES;
 
 -- check

@@ -1,0 +1,16 @@
+services:
+  pg_query_cdc:
+    image: postgres:latest
+    container_name: pg_query_cdc
+    environment:
+      POSTGRES_DB: database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5430:5432"
+    volumes:
+      - pg_query_cdc_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  pg_query_cdc_data:

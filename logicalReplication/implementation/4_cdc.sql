@@ -1,3 +1,5 @@
+-- subscriber db
+
 CREATE OR REPLACE FUNCTION log_cdc_changes()
 RETURNS TRIGGER AS $$
 BEGIN
